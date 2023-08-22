@@ -1,6 +1,13 @@
-# Don't check in the Output dir
-Output/
-
-scratch/
-
-testResults.xml
+Archive
+Artifacts
+cov.xml
+coverage.xml
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
