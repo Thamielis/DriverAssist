@@ -16,6 +16,7 @@ function Verb-Noun {
     param (
     )
     begin {
+        [string]${CmdletName} = $PSCmdlet.MyInvocation.MyCommand.Name
     }
     process {
     }
