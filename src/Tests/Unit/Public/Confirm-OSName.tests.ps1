@@ -15,11 +15,25 @@ if (Get-Module -Name $ProjectName -ErrorAction 'SilentlyContinue') {
 Import-Module $PathToManifest -Force
 #-------------------------------------------------------------------------
 
-Describe Get-Something -Tag 'Unit' {
-    Context 'When this' {
-        It 'does this' {
-            InModuleScope $ProjectName {
-            }
+Describe Confirm-OSName -Tag 'Unit' {
+InModuleScope $ProjectName {
+    Context 'When confirming the OS name' {
+        BeforeAll {
+            Mock Write-LogEntry { }
+        }
+        It 'it should return true if the OS name matches' {
+            $DriverPackageDetails = [PSCustomObject]@{ OSName = 'Windows 10'}
+            $result = Confirm-OSName -DriverPackageInput $DriverPackageDetails.OSName -OSName 'Windows 10'
+            $result | Should -Be $true
+            Should -Invoke Write-LogEntry -Exactly -Times 1
+        }
+        It 'it should return false if the OS name does not match' {
+            $DriverPackageDetails = [PSCustomObject]@{ OSName = 'Windows 11'}
+            $result = Confirm-OSName -DriverPackageInput $DriverPackageDetails.OSName -OSName 'Windows 10'
+            $result | Should -Be $false
+            Should -Invoke Write-LogEntry -Exactly -Times 1
+
         }
     }
+}
 }

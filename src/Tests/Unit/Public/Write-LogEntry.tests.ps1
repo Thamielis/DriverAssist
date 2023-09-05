@@ -17,11 +17,11 @@ Describe Write-LogEntry -Tag 'Unit' {
         InModuleScope $ProjectName {
             It "it should write the log entries to the correct directory in WinPE" {
                 Mock Test-Path { $true }
-                Mock Join-Path { "TestDrive:\OSDkit.log" }
+                Mock Join-Path { "TestDrive:\DriverAssist.log" }
                 $logMessage = "This is an informational log entry"
                 $severity = "1"
                 Write-LogEntry -Value $logMessage -Severity $severity
-                $logFile = "TestDrive:\OSDkit.log"
+                $logFile = "TestDrive:\DriverAssist.log"
                 $logFile | Should -FileContentMatch $logMessage
                 $logFile | Should -FileContentMatch "type=""$($severity)"""
             }
@@ -31,13 +31,14 @@ Describe Write-LogEntry -Tag 'Unit' {
                 $logMessage = "This is an informational log entry"
                 $severity = "1"
                 Write-LogEntry -Value $logMessage -Severity $severity -LogsDirectory 'TestDrive:\'
-                $logFile = "TestDrive:\OSDkit.log"
+                $logFile = "TestDrive:\DriverAssist.log"
                 $logFile | Should -FileContentMatch $logMessage
                 $logFile | Should -FileContentMatch "type=""$($severity)"""
             }
         }
         InModuleScope $ProjectName {
             It "it should write a log entry with Warning severity to a specified log file" {
+                Mock Join-Path { "TestDrive:\CustomLog.log" }
                 Write-LogEntry -Value "This is a warning log entry" -Severity 2 -FileName "CustomLog.log" -LogsDirectory "TestDrive:\"
                 $logFilePath = Join-Path -Path "TestDrive:\" -ChildPath "CustomLog.log"
                 $logFilePath | Should -FileContentMatch "This is a warning log entry"
@@ -46,6 +47,7 @@ Describe Write-LogEntry -Tag 'Unit' {
         }
         InModuleScope $ProjectName {
             It "it should write a log entry with Error severity to a specified log file in a custom log directory" {
+                Mock Join-Path { "TestDrive:\CustomErrorLog.log" }
                 $logMessage = "This is an error log entry"
                 $severity = "3"
                 $logFileName = "CustomErrorLog.log"

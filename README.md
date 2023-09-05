@@ -2,39 +2,12 @@
 
 ## Synopsis
 
-<!-- Enter a synopsis -->
+Simple PowerShell testing framework for finding matching drivers for a workstation in MECM
 
 ## Description
 
-<!-- Enter a description -->
-
-## Why
-
-<!-- Short reason you created the project -->
-
-## Getting Started
-
-### Prerequisites
-
-<!-- list any prerequisites -->
-
-### Installation
-
-```powershell
-# how to install DriverAssist
-
-```
-
-### Quick start
-
-#### Example1
-
-```powershell
-# command showing how to use your project
-
-```
+Simple PowerShell testing framework for finding matching drivers for a workstation in MECM. This is a work in progress.
 
 ## Author
 
 Adam Ayala
-

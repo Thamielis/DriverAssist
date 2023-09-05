@@ -87,7 +87,7 @@ Enter-Build {
     $script:ArtifactsPath = Join-Path -Path $BuildRoot -ChildPath 'Artifacts'
     $script:ArchivePath = Join-Path -Path $BuildRoot -ChildPath 'Archive'
 
-    $script:BuildModuleRootFile = Join-Path -Path $script:ArtifactsPath -ChildPath "$($script:ModuleName).psm1"
+    $script:BuildModuleRootFile = Join-Path -Path $script:ArtifactsPath -ChildPath "$($script:ModuleName).ps1"
 
     # Ensure our builds fail until if below a minimum defined code test coverage threshold
     $script:coverageThreshold = 30

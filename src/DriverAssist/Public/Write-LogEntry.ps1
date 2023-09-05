@@ -28,6 +28,7 @@ function Write-LogEntry {
     https://github.com/adamaayala/DriverAssist
     #>
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Writes to the console for debugging purposes')]
     param (
         [Parameter(Mandatory = $true, Position = 0, HelpMessage = "Value added to the log file.")]
         [ValidateNotNullOrEmpty()]
@@ -40,12 +41,7 @@ function Write-LogEntry {
         # Parameter help description
         [Parameter(Mandatory = $false, HelpMessage = "Source of the log entry used for debugging purposes.")]
         [ValidateNotNullOrEmpty()]
-        [string]$Source = $([string]$parentFunctionName = [IO.Path]::GetFileNameWithoutExtension((Get-Variable -Name 'MyInvocation' -Scope 1 -ErrorAction 'SilentlyContinue').Value.MyCommand.Name); if ($parentFunctionName) {
-            $parentFunctionName
-        }
-        else {
-            'Unknown'
-        }),
+        [string]$Source = $([string]$parentFunctionName = [IO.Path]::GetFileNameWithoutExtension((Get-Variable -Name 'MyInvocation' -Scope 1 -ErrorAction 'SilentlyContinue').Value.MyCommand.Name); if ($parentFunctionName) {$parentFunctionName} else { 'Unknown' }),
         [Parameter(Mandatory = $false, HelpMessage = "Name of the log file that the entry will written to.")]
         [ValidateNotNullOrEmpty()]
         [string]$FileName = "DriverAssist.log", # Default the value for testing
@@ -54,8 +50,11 @@ function Write-LogEntry {
     )
     begin {
         # Get the logging file path
-        if (-not $PSBoundParameters.ContainsKey('LogsDirectory')) {
-            if ($env:SYSTEMDRIVE = 'X:') { $LogsDirectory = 'X:\Windows\TEMP' } else { $LogsDirectory = $env:TEMP }
+        if (Test-Path -Path Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlset\Control\MiniNT) {
+            $LogsDirectory = 'X:\Windows\TEMP'
+        }
+        else {
+            $LogsDirectory = $env:TEMP
         }
         $logFilePath = Join-Path -Path $LogsDirectory -ChildPath $FileName
     }
@@ -66,7 +65,7 @@ function Write-LogEntry {
         $logText = "<![LOG[$($Value)]LOG]!><time=""$($Time)"" date=""$($Date)"" component=""OSD"" context=""$($Context)"" type=""$($Severity)"" thread=""$($PID)"" file="""">"
         try {
             Out-File -InputObject $logText -Append -NoClobber -FilePath $logFilePath -ErrorAction Stop -Encoding default
-            Write-Output "$($Value) :: $($Severity) :: $($Source)"
+            Write-Host "$($Value) :: Source: $($Source)"
         }
         catch [System.Exception] {
             Write-Warning -Message "Unable to append log entry to $($FileName) file. Error message at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)"
