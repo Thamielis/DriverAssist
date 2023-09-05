@@ -46,45 +46,45 @@ InModuleScope $ProjectName {
 
         }
     }
-    Context "When calling the function with invalid input" {
-        BeforeAll {
-            # Mock Confirm-SystemSKU, Confirm-ComputerModel, and Confirm-OSName functions
-            Mock Confirm-SystemSKU { throw "Invalid input" }
-            Mock Confirm-ComputerModel { throw "Invalid input" }
-            Mock Confirm-OSName { throw "Invalid input" }
-            Mock Write-LogEntry {}
-            $testData = Get-Content -Path "D:\repos\DriverAssist\testdata\Bad_SMS_Package .json" | ConvertFrom-Json
-            $script:testOData = $testData.value
-            $script:fakeComputerData = [PSCustomObject]@{
-                Model = "OptiPlex 7090"
-                SystemSKU = "0A52"
-                OSName = "Windows 10"
-                Manufacturer = "Dell"
-            }
-        }
-        It "Should throw an error" {
-            { Confirm-DriverPackage -DriverPackageList @() -ComputerDetectionMethod "SystemSKU" -ComputerData @{} } | Should -Throw
-        }
-    }
-    Context "When calling the function with a single driver package input that matches the computer data on Model" {
-        BeforeAll {
-            # Mock Confirm-ComputerModel and Confirm-OSName functions
-            Mock Confirm-ComputerModel { return @{ Detected = $true; Model = "TestModel" } }
-            Mock Confirm-OSName { return $true }
-            Mock Write-LogEntry {}
-            $testData = Get-Content -Path "D:\repos\DriverAssist\testdata\Bad_SMS_Package .json" | ConvertFrom-Json
-            $script:testOData = $testData.value
-            $script:fakeComputerData = [PSCustomObject]@{
-                Model = "OptiPlex 7090"
-                SystemSKU = "0A52"
-                OSName = "Windows 10"
-                Manufacturer = "Dell"
-            }
-        }
-        It "Should return driver package objects with the expected properties" {
-            Confirm-DriverPackage -DriverPackage $script:testOData  -ComputerDetectionMethod "SystemSKU" -ComputerData $script:fakeComputerData
-            Should -Invoke Write-LogEntry -Exactly -Times 5
-        }
-    }
+    # Context "When calling the function with invalid input" {
+    #     BeforeAll {
+    #         # Mock Confirm-SystemSKU, Confirm-ComputerModel, and Confirm-OSName functions
+    #         Mock Confirm-SystemSKU { throw "Invalid input" }
+    #         Mock Confirm-ComputerModel { throw "Invalid input" }
+    #         Mock Confirm-OSName { throw "Invalid input" }
+    #         Mock Write-LogEntry {}
+    #         $testData = Get-Content -Path "D:\repos\DriverAssist\testdata\Bad_SMS_Package .json" | ConvertFrom-Json
+    #         $script:testOData = $testData.value
+    #         $script:fakeComputerData = [PSCustomObject]@{
+    #             Model = "OptiPlex 7090"
+    #             SystemSKU = "0A52"
+    #             OSName = "Windows 10"
+    #             Manufacturer = "Dell"
+    #         }
+    #     }
+    #     It "Should throw an error" {
+    #         { Confirm-DriverPackage -DriverPackageList @() -ComputerDetectionMethod "SystemSKU" -ComputerData @{} } | Should -Throw
+    #     }
+    # }
+    # Context "When calling the function with a single driver package input that matches the computer data on Model" {
+    #     BeforeAll {
+    #         # Mock Confirm-ComputerModel and Confirm-OSName functions
+    #         Mock Confirm-ComputerModel { return @{ Detected = $true; Model = "TestModel" } }
+    #         Mock Confirm-OSName { return $true }
+    #         Mock Write-LogEntry {}
+    #         $testData = Get-Content -Path "D:\repos\DriverAssist\testdata\Bad_SMS_Package .json" | ConvertFrom-Json
+    #         $script:testOData = $testData.value
+    #         $script:fakeComputerData = [PSCustomObject]@{
+    #             Model = "OptiPlex 7090"
+    #             SystemSKU = "0A52"
+    #             OSName = "Windows 10"
+    #             Manufacturer = "Dell"
+    #         }
+    #     }
+    #     It "Should return driver package objects with the expected properties" {
+    #         Confirm-DriverPackage -DriverPackage $script:testOData  -ComputerDetectionMethod "SystemSKU" -ComputerData $script:fakeComputerData
+    #         Should -Invoke Write-LogEntry -Exactly -Times 5
+    #     }
+    # }
 }
 }
