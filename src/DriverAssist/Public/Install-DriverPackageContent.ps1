@@ -21,7 +21,7 @@ function Install-DriverPackageContent {
     )
     begin {
         [string]${CmdletName} = $PSCmdlet.MyInvocation.MyCommand.Name
-        $DriverPackageFile = Get-ChildItem -Path $ContentLocation -Filter "DriverPackage.*"
+        $DriverPackageFile = Get-ChildItem -Path $ContentLocation -Filter "DriverPackage.wim"
     }
     process {
         try {

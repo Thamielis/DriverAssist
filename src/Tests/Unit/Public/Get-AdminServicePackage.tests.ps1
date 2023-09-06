@@ -38,16 +38,16 @@ InModuleScope $ProjectName {
             } }
         }
         It "Should call the AdminService endpoint with the expected URI" {
-            Get-AdminServicePackage -Filter "TestFilter"
+            Get-AdminServicePackage -Model "TestFilter"
             Should -Invoke Invoke-RestMethod -Times 1
         }
         It "Should return a non-empty array list of package objects" {
-            $packages = Get-AdminServicePackage -Filter "TestFilter"
+            $packages = Get-AdminServicePackage -Model "TestFilter"
             $packages[0].Name | Should -Be 'ConfigMgr Client Package'
             $packages.GetType().Name | Should -Be "Object[]"
         }
         It "Should return package objects with the expected properties" {
-            $packages = Get-AdminServicePackage -Filter "TestFilter"
+            $packages = Get-AdminServicePackage -Model "TestFilter"
             $packages[0].Name | Should -Be 'ConfigMgr Client Package'
             $packages[0].PackageID | Should -Be 'Package1ID'
             $packages[0].Version | Should -Be '1.0.0'
@@ -65,7 +65,7 @@ InModuleScope $ProjectName {
             Mock Invoke-RestMethod { throw "Invalid filter" }
         }
         It "Should throw an error" {
-            { Get-AdminServicePackage -Filter "InvalidFilter" } | Should -Throw
+            { Get-AdminServicePackage -Model "InvalidFilter" } | Should -Throw
         }
     }
 }
