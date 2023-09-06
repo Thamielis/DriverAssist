@@ -65,7 +65,7 @@ function Write-LogEntry {
         $logText = "<![LOG[$($Value)]LOG]!><time=""$($Time)"" date=""$($Date)"" component=""OSD"" context=""$($Context)"" type=""$($Severity)"" thread=""$($PID)"" file="""">"
         try {
             Out-File -InputObject $logText -Append -NoClobber -FilePath $logFilePath -ErrorAction Stop -Encoding default
-            Write-Host "$($Value) :: Source: $($Source)"
+            Write-Host "$($Value) :: Cmdlet : $($Source)"
         }
         catch [System.Exception] {
             Write-Warning -Message "Unable to append log entry to $($FileName) file. Error message at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)"

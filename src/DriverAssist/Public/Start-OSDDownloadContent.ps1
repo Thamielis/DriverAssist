@@ -93,7 +93,6 @@ function Start-OSDDownloadContent {
                 }
                 $process = New-Object -TypeName 'System.Diagnostics.Process' -ErrorAction 'Stop'
                 $process.StartInfo = $processStartInfo
-
                 if ($processStartInfo.UseShellExecute -eq $false) {
                     # Add event handler to capture process's standard output redirection
                     [scriptblock]$processEventHandler = { if (-not [string]::IsNullOrEmpty($EventArgs.Data)) { $Event.MessageData.AppendLine($EventArgs.Data) } }
@@ -144,6 +143,7 @@ function Start-OSDDownloadContent {
                 # Get the exit code for the process
                 try {
                     [int32]$returnCode = $process.ExitCode
+                    Write-LogEntry -Value "[i] Process exit code: [$returnCode]" -Severity 1 -Source ${CmdletName}
                 }
                 catch [System.Management.Automation.PSInvalidCastException] {
                     # Catch exit codes that are out of int32 range

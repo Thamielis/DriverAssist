@@ -12,8 +12,9 @@ function Confirm-DriverPackage {
     .PARAMETER DriverPackage
     Specify the driver package object to be validated. This is the output from the Get-AdminServicePackage function.
     .EXAMPLE
+    Confirm-DriverPackage -ComputerData $ComputerData -DriverPackage $DriverPackage
     .INPUTS
-
+    System.Management.Automation.PSCustomObject, System.Object[]
     .OUTPUTS
     [System.Object[]]DriverPackage
     .NOTES

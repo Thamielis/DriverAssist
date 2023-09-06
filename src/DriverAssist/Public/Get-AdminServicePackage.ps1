@@ -25,7 +25,7 @@ function Get-AdminServicePackage {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, HelpMessage = "Specify the filter for the AdminService API call, e.g. 'Optiplex 2600'")]
-        [string]$Filter
+        [string]$Model
     )
     begin {
         [string]${CmdletName} = $PSCmdlet.MyInvocation.MyCommand.Name
@@ -40,11 +40,11 @@ function Get-AdminServicePackage {
             Write-LogEntry -Value "[i] Retrieving credential object from Get-AuthCredential function" -Severity 1 -Source ${CmdletName}
             $script:credential = Get-AuthCredential
             # Construct the AdminService URI using the FQDN of the ConfigMgr site server API and the resource path
-            $adminServiceURI = "https://$($adminServiceFQDN)/AdminService/wmi/SMS_Package?`$filter=contains(Name,'$($Filter)')"
+            $adminServiceURI = "https://$($adminServiceFQDN)/AdminService/wmi/SMS_Package?`$filter=contains(Name,'$($Model)')"
             Write-LogEntry -Value "[i] Calling AdminService endpoint with URI: $($adminServiceUri)" -Severity 1 -Source ${CmdletName}
             $adminServiceResponse = Invoke-RestMethod -Method Get -Uri $adminServiceURI -Credential $script:credential
             if ($adminServiceResponse) {
-                Write-LogEntry -Value "[+] Successfully retrieved available package items from AdminService endpoint for $($Filter)" -Severity 1 -Source ${CmdletName}
+                Write-LogEntry -Value "[+] Successfully retrieved available package items from AdminService endpoint for $($Model)" -Severity 1 -Source ${CmdletName}
             }
         }
         catch {

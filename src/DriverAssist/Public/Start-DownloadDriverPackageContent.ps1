@@ -50,7 +50,6 @@ function Start-DownloadDriverPackageContent {
         # If download process was successful, meaning exit code from above function was 0, return the download location path
         $DriverPackageContentLocation = Get-TSValue -Name "$($DriverVariableName)01"
         Write-LogEntry -Value "[+] Driver package content files was successfully downloaded to: $($DriverPackageContentLocation)" -Severity 1 -Source ${CmdletName}
-
     }
     end {
         # Handle return value for successful download of driver package content files

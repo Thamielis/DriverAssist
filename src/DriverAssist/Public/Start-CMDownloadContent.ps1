@@ -26,7 +26,6 @@ function Start-CMDownloadContent {
     .LINK
     https://github.com/adamaayala/DriverAssist
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not State Changing')]
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not State Changing')]
     param (
@@ -60,7 +59,7 @@ function Start-CMDownloadContent {
         Set-TSVariable -Value "$($DestinationVariableName)" -Name "OSDDownloadDestinationVariable"
         # Set the task sequence variable: OSDDownloadDestinationPath
         if ($DestinationLocationType -like "Custom") {
-            Write-LogEntry -Value " - Setting task sequence variable OSDDownloadDestinationPath to: $($CustomLocationPath)" -Severity 1 -Source ${CmdletName}
+            Write-LogEntry -Value "[+] Setting task sequence variable OSDDownloadDestinationPath to: $($CustomLocationPath)" -Severity 1 -Source ${CmdletName}
             Set-TSVariable -Name "OSDDownloadDestinationPath" -Value "$($CustomLocationPath)"
         }
         # Set SMSTSDownloadRetryCount to 1000 to overcome potential BranchCache issue that will cause 'SendWinHttpRequest failed. 80072efe'
@@ -68,12 +67,12 @@ function Start-CMDownloadContent {
         try {
             if (Test-Path -Path Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlset\Control\MiniNT) {
                 # We are in WinPE, so we need to use the OSDDownloadContent.exe executable from the boot image
-                Write-LogEntry -Value "[+] Starting package content download process ($($osdPhase)), this might take some time" -Severity 1
+                Write-LogEntry -Value "[+] Starting package content download process (WinPE), this might take some time" -Severity 1
                 Start-OSDDownloadContent -FilePath "OSDDownloadContent.exe"
             }
             else {
                 # We are in Windows, so we need to use the OSDDownloadContent.exe executable from the CCM folder
-                Write-LogEntry -Value "[+] Starting package content download process ($($osdPhase)), this might take some time" -Severity 1 -Source ${CmdletName}
+                Write-LogEntry -Value "[+] Starting package content download process (Windows), this might take some time" -Severity 1 -Source ${CmdletName}
                 Start-OSDDownloadContent -FilePath (Join-Path -Path $env:WINDIR -ChildPath "CCM\OSDDownloadContent.exe")
             }
             # Reset SMSTSDownloadRetryCount to 5 after attempted download
